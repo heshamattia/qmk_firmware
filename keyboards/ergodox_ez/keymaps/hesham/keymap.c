@@ -4,7 +4,7 @@
 #define BASE 0 // default layer
 #define SYMB 1 // symbols
 #define EXTN 2 // extend
-#define MIRR 2 // mirror
+#define MIRR 3 // mirror
 
 #define KC_MAC_UNDO LGUI(KC_Z)
 #define KC_MAC_CUT LGUI(KC_X)
