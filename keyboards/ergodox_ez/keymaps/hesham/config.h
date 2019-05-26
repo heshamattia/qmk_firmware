@@ -3,5 +3,4 @@
   See config.h options at https://docs.qmk.fm/#/config_options?id=the-configh-file
 */
 #undef TAPPING_TERM
-#define TAPPING_TERM 201
-
+#define TAPPING_TERM 200

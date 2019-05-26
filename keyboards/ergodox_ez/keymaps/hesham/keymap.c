@@ -6,21 +6,27 @@
 #define EXTN 2 // extend
 #define MIRR 3 // mirror
 
-#define KC_MAC_UNDO LGUI(KC_Z)
-#define KC_MAC_CUT LGUI(KC_X)
-#define KC_MAC_COPY LGUI(KC_C)
-#define KC_MAC_PASTE LGUI(KC_V)
-#define KC_PC_UNDO LCTL(KC_Z)
-#define KC_PC_CUT LCTL(KC_X)
-#define KC_PC_COPY LCTL(KC_C)
-#define KC_PC_PASTE LCTL(KC_V)
-
 #define ___ KC_TRNS
 
 enum custom_keycodes {
   EPRM = SAFE_RANGE,
   VRSN,
-  RGB_SLD
+  RGB_SLD,
+  DELETE_LINE
+};
+
+//Tap Dance Declarations
+enum {
+  TD_LBRC = 0,
+  TD_RBRC = 1
+};
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  //Tap once for Esc, twice for Caps Lock
+  [TD_LBRC] = ACTION_TAP_DANCE_DOUBLE(KC_LCBR, KC_LBRC),
+  [TD_RBRC] = ACTION_TAP_DANCE_DOUBLE(KC_RCBR, KC_RBRC)
+// Other declarations would go here, separated by commas, if you have them
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -29,110 +35,70 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | ESC    |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Tab    |   Q  |   W  |   F  |   P  |   B  |      |           |  Up  |   J  |   L  |   U  |   Y  |   :  | Enter  |
+ * | TAB    |   Q  |   W  |   F  |   P  |   B  |      |           |      |   J  |   L  |   U  |   Y  |   :  | BCKSP  |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | RShift |   A  |   R  |   S  |   T  |   G  |------|           |------|   M  |   N  |   E  |   I  |  O   | RShift |
- * |--------+------+------+------+------+------|      |           | Down |------+------+------+------+------+--------|
- * | MO(1)  |   Z  |   X  |   C  |   D  |   V  |      |           |      |   K  |   H  |   ,  |   .  |  /   | MO(1)  |
+ * | RShift |   A  |   R  |   S  |   T  |   G  |------|           |------|   M  |   N  |   E  |   I  |   O  | RShift |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * | MO(1)  |   Z  |   X  |   C  |   D  |   V  |      |           |      |   K  |   H  |   ,  |   .  |   /  | MO(1)  |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |  GUI |  '"  |      | RAlt |                                       | LAlt |      |   /  | GUI  |      |
+ *   |      |  GUI |  '"  | MO(3)| RALT |                                       | LEFT | DOWN |  UP  | RIGHT|      |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,---------------.
  *                                        |      |      |       |      |        |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | MO(3)|       | MO(3)|        |      |
- *                                 | BSPC | Ctrl |------|       |------|  MO(2) | Space|
+ *                                 |      |      |      |       |      |        |      |
+ *                                 | RALT | Ctrl |------|       |------|  GUI   | Space|
  *                                 |      |      | ESC  |       | ESC  |        |      |
  *                                 `--------------------'       `----------------------'
  */
   [BASE] = LAYOUT_ergodox(
       // Left Side
       KC_ESCAPE,      KC_1,      KC_2,       KC_3,  KC_4,     KC_5,  ___,
-      KC_TAB,         KC_Q,      KC_W,       KC_F,  KC_P,     KC_B,  ___,
+      KC_TAB,         KC_Q,      KC_W,       KC_F,  KC_P,     KC_B,  TD(TD_LBRC),
       OSM(MOD_RSFT),  KC_A,      KC_R,       KC_S,  KC_T,     KC_G,
-      MO(1),          KC_Z,      KC_X,       KC_C,  KC_D,     KC_V,  ___,
-      ___,            KC_LGUI,   KC_QUOTE,   ___,   KC_LALT,
+      MO(1),          KC_Z,      KC_X,       KC_C,  KC_D,     KC_V,  KC_QUOTE,
+      KC_BSPACE,      KC_LGUI,   KC_QUOTE,   ___,   MO(3),
       ___,            ___,
       MO(3),
-      KC_BSPACE,      KC_LCTRL,  KC_ESCAPE,
+      LT(2, KC_BSPACE),   MT(MOD_LCTL, KC_ENTER),  MT(MOD_LALT, KC_ESCAPE),
       // Right Side
-      ___,            KC_6,          KC_7,          KC_8,      KC_9,            KC_0,              ___,
-      KC_UP,          KC_J,          KC_L,          KC_U,      KC_Y,            KC_SCOLON,         KC_ENTER,
+      ___,            KC_6,          KC_7,          KC_8,      KC_9,            KC_0,              KC_ENTER,
+      TD(TD_RBRC),    KC_J,          KC_L,          KC_U,      KC_Y,            KC_SCOLON,         KC_BSPACE,
       KC_M,           KC_N,          KC_E,          KC_I,      KC_O,            OSM(MOD_LSFT),
-      KC_DOWN,        KC_K,          KC_H,          KC_COMMA,  KC_DOT,          KC_SLASH,  MO(1),
-      KC_RALT,        ___,           KC_BSLASH,     KC_RGUI,   ___,
+      KC_BSLASH,      KC_K,          KC_H,          KC_COMMA,  KC_DOT,          KC_SLASH,  MO(1),
+      ___,            KC_LEFT,       KC_DOWN,       KC_UP,     KC_RIGHT,
       ___,            ___,
       MO(3),
-      KC_ESCAPE,      MO(2),         KC_SPACE
+      MT(MOD_RALT, KC_ESCAPE),      OSM(MOD_LSFT),       KC_SPACE
     ),
 
-/* Keymap 1: Symbol layer
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * | ESC    |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Tab    |   Q  |   W  |   F  |   P  |   B  |      |           |  Up  |   J  |   L  |   U  |   Y  |   :  | Enter  |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | RShift |   A  |   R  |   S  |   T  |   G  |------|           |------|   M  |   N  |   E  |   I  |  O   | RShift |
- * |--------+------+------+------+------+------|      |           | Down |------+------+------+------+------+--------|
- * | MO(1)  |   Z  |   X  |   C  |   D  |   V  |      |           |      |   K  |   H  |   ,  |   .  |  /   | MO(1)  |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |  GUI |  '"  |      | RAlt |                                       | LAlt |      |   /  | GUI  |      |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,---------------.
- *                                        |      |      |       |      |        |
- *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | MO(3)|       | MO(3)|        |      |
- *                                 | BSPC | Ctrl |------|       |------|  MO(2) | Space|
- *                                 |      |      | ESC  |       | ESC  |        |      |
- *                                 `--------------------'       `----------------------'
- */
+/* Keymap 1: Symbol layer */
   [SYMB] = LAYOUT_ergodox(
     // Left Side
     KC_ESCAPE,  ___,       ___,        ___,          ___,          ___,        ___,
     KC_TILD,    KC_EXLM,   KC_AT,      KC_HASH,      KC_DLR,       KC_PERC,    ___,
     KC_LSHIFT,  KC_PLUS,   KC_EQUAL,   KC_MINUS,     KC_UNDS,      KC_RABK,    ___,
     ___,        ___,       ___,        ___,          ___,          ___,        ___,
-    KC_LGUI,    KC_QUOTE,  ___,        KC_LALT,
+    KC_LGUI,    KC_QUOTE,  ___,        KC_ENTER,
     ___,        ___,
     ___,
-    ___,        KC_LCTRL,  ___,
+    KC_LALT,    KC_LCTRL,  KC_ESCAPE,
 
     // Right Side
-    ___,        ___,       ___,        ___,          ___,          ___,        ___,  ___,
-    KC_CIRC,    KC_AMPR,   KC_ASTR,    KC_LPRN,      KC_RPRN,      KC_ENTER,
+    ___,        ___,       ___,        ___,          ___,          ___,        ___,  KC_ENTER,
+    KC_CIRC,    KC_AMPR,   KC_ASTR,    KC_LPRN,      KC_RPRN,      KC_BSPACE,
     KC_GRAVE,   KC_DQUO,   KC_QUOTE,   KC_LCBR,      KC_RCBR,      KC_RSHIFT,
     ___,        ___,       KC_PIPE,    KC_LBRACKET,  KC_RBRACKET,  KC_BSLASH,  ___,
     KC_RALT,    ___,       KC_BSLASH,  KC_RGUI,      ___,
     ___,        ___,
     ___,
-    ___,        MO(2),     ___
+    KC_ESCAPE,  KC_RGUI,   KC_ENTER
   ),
 
-/* Keymap 2: Extend layer
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * | ESC    |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Tab    |   Q  |   W  |   F  |   P  |   B  |      |           |  Up  |   J  |   L  |   U  |   Y  |   :  | Enter  |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | RShift |   A  |   R  |   S  |   T  |   G  |------|           |------|   M  |   N  |   E  |   I  |  O   | RShift |
- * |--------+------+------+------+------+------|      |           | Down |------+------+------+------+------+--------|
- * | MO(1)  |   Z  |   X  |   C  |   D  |   V  |      |           |      |   K  |   H  |   ,  |   .  |  /   | MO(1)  |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |  GUI |  '"  |      | RAlt |                                       | LAlt |      |   /  | GUI  |      |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,---------------.
- *                                        |      |      |       |      |        |
- *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | MO(3)|       | MO(3)|        |      |
- *                                 | BSPC | Ctrl |------|       |------|  MO(2) | Space|
- *                                 |      |      | ESC  |       | ESC  |        |      |
- *                                 `--------------------'       `----------------------'
- */
+/* Keymap 2: Extend layer */
   [EXTN] = LAYOUT_ergodox(
     ___,           ___,         ___,              ___,         ___,        ___,         ___,
-    LCTL(KC_TAB),  ___,         ___,              ___,         ___,        ___,         ___,
+    LALT(KC_TAB),  ___,         ___,              ___,         ___,        ___,         ___,
     KC_LSHIFT,     KC_LGUI,     KC_LALT,          KC_LSHIFT,   KC_LCTRL,   ___,
     ___,           LCTL(KC_Z),  LCTL(KC_X),       LCTL(KC_C),  ___,        LCTL(KC_V),  ___,
     ___,           ___,         ___,              ___,         ___,
@@ -142,33 +108,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ___,           ___,         ___,              KC_ESCAPE,   ___,        ___,         ___,
     ___,           KC_PGUP,     KC_HOME,          KC_UP,       KC_END,     KC_BSPACE,   KC_ENTER,
     KC_PGDOWN,     KC_LEFT,     KC_DOWN,          KC_RIGHT,    KC_DELETE,  KC_RSHIFT,
-    ___,           ___,         ___,              KC_ENTER,    ___,        ___,         ___,
+    ___,           ___,         DELETE_LINE,      KC_ENTER,    ___,        ___,         ___,
     ___,           ___,         ___,              ___,         ___,
     ___,           ___,
     ___,
     ___,           ___,         LCTL(KC_SPACE)),
 
-/* Keymap 3: Mirror layer
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * | ESC    |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Tab    |   Q  |   W  |   F  |   P  |   B  |      |           |  Up  |   J  |   L  |   U  |   Y  |   :  | Enter  |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | RShift |   A  |   R  |   S  |   T  |   G  |------|           |------|   M  |   N  |   E  |   I  |  O   | RShift |
- * |--------+------+------+------+------+------|      |           | Down |------+------+------+------+------+--------|
- * | MO(1)  |   Z  |   X  |   C  |   D  |   V  |      |           |      |   K  |   H  |   ,  |   .  |  /   | MO(1)  |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |  GUI |  '"  |      | RAlt |                                       | LAlt |      |   /  | GUI  |      |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,---------------.
- *                                        |      |      |       |      |        |
- *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | MO(3)|       | MO(3)|        |      |
- *                                 | BSPC | Ctrl |------|       |------|  MO(2) | Space|
- *                                 |      |      | ESC  |       | ESC  |        |      |
- *                                 `--------------------'       `----------------------'
- */
+/* Keymap 3: Mirror layer */
   [MIRR] = LAYOUT_ergodox(
     ___,   VRSN,        ___,     ___,       ___,   ___,   ___,
     ___,   KC_SCOLON,  KC_Y,    KC_U,      KC_L,  KC_J,  ___,
@@ -196,13 +142,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         eeconfig_init();
         return false;
       case VRSN:
-        SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+        SEND_STRING(QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
         return false;
       #ifdef RGBLIGHT_ENABLE
       case RGB_SLD:
         rgblight_mode(1);
         return false;
       #endif
+      case DELETE_LINE:
+        SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_HOME)) SS_TAP(X_BSPACE) SS_TAP(X_BSPACE));
+        return false;
     }
   }
   return true;
