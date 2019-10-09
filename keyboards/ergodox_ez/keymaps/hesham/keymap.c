@@ -28,13 +28,11 @@ enum custom_keycodes {
 
 /* Unused Tap Dance Declarations */
 enum {
-  TD_LBCR = 0,
-  TD_RBCR = 1
+  TD_QUOTES = 0,
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [TD_LBCR]     = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_LCBR),
-  [TD_RBCR]     = ACTION_TAP_DANCE_DOUBLE(KC_RBRC, KC_RCBR)
+  [TD_QUOTES]     = ACTION_TAP_DANCE_DOUBLE(KC_QUOTE, KC_DQUO),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -61,21 +59,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
   [BASE] = LAYOUT_ergodox(
       // Left Side
-      KC_ESCAPE,      KC_1,      KC_2,       KC_3,  KC_4,     KC_5,  ___,
-      KC_TAB,         KC_Q,      KC_W,       KC_F,  KC_P,     KC_B,  ___,
-      KC_LSPO,        KC_A,      KC_R,       KC_S,  KC_T,     KC_G,
-      LT(1, KC_QUOTE), KC_Z,      KC_X,       KC_C,  KC_D,     KC_V,  TD(TD_LBCR),
-      KC_BSPACE,      KC_LGUI,   KC_QUOTE,   ___,   MO(3),
-      ___,            ___,
+      KC_GESC,        KC_1,      KC_2,       KC_3,     KC_4,     KC_5,  ___,
+      KC_TAB,         KC_Q,      KC_W,       KC_F,     KC_P,     KC_B,  ___,
+      KC_LSFT,        KC_A,      KC_R,       KC_S,     KC_T,     KC_G,
+      MO(1),         KC_Z,      KC_X,       KC_C,     KC_D,     KC_V,  KC_DEL,
+      KC_BSPACE,      KC_LGUI,   KC_QUOTE,   KC_RGUI,  MO(3),
+      KC_BTN3,        ___,
       MO(3),
-      LT(2, KC_BSPACE), MT(MOD_LCTL, KC_ENTER),  MT(MOD_LALT, KC_ESCAPE),
+      MT(MOD_LCTL, KC_BSPACE), LT(2, KC_ENTER), MT(MOD_LALT, KC_ESCAPE),
       // Right Side
       ___,            KC_6,          KC_7,          KC_8,      KC_9,            KC_0,              KC_ENTER,
       ___,            KC_J,          KC_L,          KC_U,      KC_Y,            KC_SCOLON,         KC_BSPACE,
-      KC_M,           KC_N,          KC_E,          KC_I,      KC_O,            KC_RSPC,
-      TD(TD_RBCR),    KC_K,          KC_H,          KC_COMMA,  KC_DOT,          KC_SLASH,          LT(1, KC_QUOTE),
+      KC_M,           KC_N,          KC_E,          KC_I,      KC_O,            KC_RSFT,
+      ___,            KC_K,          KC_H,          KC_COMMA,  KC_DOT,          KC_SLASH,          MO(1),
       KC_LEFT,        KC_DOWN,       KC_UP,         KC_RIGHT,  ___,
-      ___,            ___,
+      KC_LBRC,        KC_RBRC,
       MO(3),
       MT(MOD_RALT, KC_ESCAPE),       KC_RGUI,       KC_SPACE
     ),
@@ -83,20 +81,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 1: Symbol layer */
   [SYMB] = LAYOUT_ergodox(
     // Left Side
-    ___,        ___,       ___,        ___,          ___,          ___,        ___,
+    KC_GESC,    MEH(KC_1), MEH(KC_2),  MEH(KC_3),    MEH(KC_4),    MEH(KC_5),  ___,
     KC_TILD,    KC_EXLM,   KC_AT,      KC_HASH,      KC_DLR,       KC_PERC,    ___,
-    ___,        KC_PLUS,   KC_EQUAL,   KC_MINUS,     KC_UNDS,      KC_RABK,    ___,
-    ___,        ___,       KC_ARROW,   ___,          ___,          ___,        ___,
-    ___,        KC_QUOTE,  ___,        ___,
+    ___,        KC_PLUS,   KC_EQUAL,   KC_MINUS,     KC_UNDS,      KC_DQUO,    ___,
+    ___,        ___,       KC_ARROW,   ___,          KC_QUOTE,     ___,        ___,
+    ___,        KC_QUOTE,  ___,        ___,          ___,
     ___,        ___,
     ___,
     ___,        ___,  ___,
 
     // Right Side
-    ___,        ___,       ___,        ___,          ___,          ___,        ___,  ___,
-    KC_CIRC,    KC_AMPR,   KC_ASTR,    KC_LPRN,      KC_RPRN,      ___,
-    ___,        KC_LCBR,   KC_RCBR,    ___,          ___,          ___,
-    ___,        ___,       KC_LBRC,    KC_RBRC,      ___,          KC_BSLASH,    ___,
+    ___,        MEH(KC_6), MEH(KC_7),  MEH(KC_8),    MEH(KC_9),    MEH(KC_0),    ___,
+                KC_CIRC,   KC_AMPR,    KC_ASTR,      KC_LPRN,      KC_RPRN,      ___,
+                KC_DQUO,   KC_LCBR,    KC_RCBR,      KC_PIPE,      ___,          ___,
+    ___,        KC_QUOTE,  KC_LBRC,    KC_RBRC,      ___,          KC_BSLASH,    ___,
     ___,        ___,       ___,        ___,          ___,
     ___,        ___,
     ___,
@@ -106,17 +104,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 2: Extend layer */
   [EXTN] = LAYOUT_ergodox(
     // Left Side
-    ___,           ___,         ___,              ___,         ___,        ___,         ___,
+    KC_GESC,           HYPR(KC_1),       HYPR(KC_2),        HYPR(KC_3),          HYPR(KC_4),          HYPR(KC_5), ___,
     LALT(KC_TAB),  ___,         ___,              DELETE_LINE_B,        ___,         DELETE_LINE_F, ___,
-    ___,           KC_LGUI,     KC_LCTRL,         KC_LSHIFT,   KC_LALT,    ___,
+    ___,           KC_LGUI,     KC_LALT,          KC_LSHIFT,   KC_LCTRL,    ___,
     ___,           LCTL(KC_Z),  LCTL(KC_X),       LCTL(KC_C),  DUP_LINE, LCTL(KC_V),  ___,
     ___,           ___,         ___,              ___,         ___,
     ___,           ___,
     ___,
-    ___,           KC_LCTRL,    ___,
+    ___,           ___,    ___,
 
-    // Right Side    
-    ___,           ___,         ___,              KC_ESCAPE,   ___,        ___,         ___,
+    // Right Side
+    ___,           HYPR(KC_6),       HYPR(KC_7),        HYPR(KC_8),          HYPR(KC_9),          HYPR(KC_0),  ___,
     ___,           KC_PGUP,     KC_HOME,          KC_UP,       KC_END,     SELECT_LINE,  ___,
                    KC_PGDOWN,   KC_LEFT,          KC_DOWN,     KC_RIGHT,   KC_ENTER,    ___,
     ___,           CREATE_LINK, KC_BSPACE,        KC_DELETE,   ___,        ___,         SURROUND_QUOTES,
@@ -140,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Right Side
     ___,   ___,        ___,     ___,       ___,   ___,   ___,
     ___,   KC_B,       KC_P,    KC_F,      KC_W,  KC_Q,  ___,
-    KC_G,  KC_T,       KC_S,    KC_R,      KC_A,  ___,
+           KC_G,       KC_T,    KC_S,      KC_R,  KC_A,  ___,
     ___,   KC_V,       KC_D,    KC_C,      KC_X,  KC_Z,  ___,
     ___,   ___,        ___,     ___,       ___,
     ___,   ___,
@@ -193,6 +191,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING("\"");
         SEND_STRING(SS_LCTRL("v"));
         SEND_STRING("\"");
+        return false;
     }
   }
   return true;
