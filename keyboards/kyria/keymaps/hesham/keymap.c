@@ -30,6 +30,18 @@ enum custom_keycodes {
   KC_ARROW,
 };
 
+//Tap Dance Declarations
+enum {
+  TD_COMMA_TAB = 0
+};
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  //Tap once for Esc, twice for Caps Lock
+  [TD_COMMA_TAB]  = ACTION_TAP_DANCE_DOUBLE(KC_COMMA, KC_TAB)
+// Other declarations would go here, separated by commas, if you have them
+};
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* 
@@ -49,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
       ___,       KC_Q,   KC_W,   KC_F,   KC_P,   KC_B,                                    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCOLON,    ___,
       ___,       KC_A,   KC_R,   KC_S,   KC_T,   KC_G,                                    KC_M,    KC_N,    KC_E,    KC_I,    KC_O,         ___,
-      ___,       KC_Z,   KC_X,   KC_C,   KC_D,   KC_V,   MO(_MIRR),   KC_LSFT, KC_RSFT, ___, KC_K, KC_H,    KC_COMM, KC_DOT,  KC_UNDS,   ___,
+      ___,       KC_Z,   KC_X,   KC_C,   KC_D,   KC_V,   MO(_MIRR),   KC_LSFT, KC_RSFT, ___, KC_K, KC_H,    TD(TD_COMMA_TAB), KC_DOT,  KC_UNDS,   ___,
               LALT_T(KC_TAB), LCTL_T(KC_LEAD),  LT(_EXTN, KC_BSPC), LT(_SYMB, KC_ESC), LGUI_T(KC_ENTER), LT(_NUMBR, KC_ENTER),   OSM(MOD_RSFT), KC_SPACE, LALT_T(KC_DEL), LGUI_T(KC_GRV)
     ),
 /*
@@ -67,9 +79,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_SYMB] = LAYOUT(
-      ___, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  _______,                     _______, KC_LPRN, KC_RPRN, KC_BSLASH, KC_SLASH,   ___,
-      ___, KC_EQL,  KC_MINS, KC_PLUS, _______, _______,                     _______, KC_LCBR, KC_RCBR, KC_QUOTE, KC_DQUO,   ___,
-      ___, KC_CIRC, KC_AMPR, KC_ASTR, KC_PIPE, _______, ___, ___, ___, ___, _______, KC_LBRC, KC_RBRC, KC_ARROW, KC_QUES, ___,
+      ___, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                     _______, KC_LPRN, KC_RPRN, KC_BSLASH, KC_SLASH,   ___,
+      ___, _______, KC_MINS, KC_PLUS, KC_EQL, _______,                     _______, KC_LCBR, KC_RCBR, KC_QUOTE, KC_DQUO,   ___,
+      ___, KC_CIRC, KC_AMPR, KC_ASTR, KC_PIPE, KC_TILD, ___, ___, ___, ___, _______, KC_LBRC, KC_RBRC, KC_ARROW, KC_QUES, ___,
                                  _______, _______, _______, ___, ___, ___, MO(_NUMBR), _______, _______, _______
     ),
 /*
