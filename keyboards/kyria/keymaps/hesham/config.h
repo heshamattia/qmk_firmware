@@ -19,10 +19,8 @@
 #define LEADER_TIMEOUT 300
 
 #ifdef RGBLIGHT_ENABLE
-  #define RGBLIGHT_ANIMATIONS
-  #define RGBLIGHT_HUE_STEP 8
-  #define RGBLIGHT_SAT_STEP 8
-  #define RGBLIGHT_VAL_STEP 8
+  #define RGBLIGHT_SLEEP
+  #define RGBLIGHT_SPLIT
 #endif
 
 
@@ -34,3 +32,4 @@
 #define ONESHOT_TIMEOUT 500 
 
 #define TAPPING_TERM 200
+#define PERMISSIVE_HOLD
